@@ -129,6 +129,8 @@ namespace Com.MyCompany.MyGame
             {
                 this.beams.SetActive(this.IsFiring);
             }
+
+            
         }
 
         /// <summary>
