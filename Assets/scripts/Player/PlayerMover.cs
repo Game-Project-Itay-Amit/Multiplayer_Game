@@ -22,6 +22,8 @@ public class PlayerMover : MonoBehaviourPun
     [SerializeField] private KeyCode sprint;
     private float currentSpeed;
 
+    Animator animator;
+
 
     private void Awake()
     {
@@ -29,6 +31,8 @@ public class PlayerMover : MonoBehaviourPun
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
         controller = GetComponent<CharacterController>();
+
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -41,16 +45,21 @@ public class PlayerMover : MonoBehaviourPun
         if (Input.GetKey(sprint))
         {
             currentSpeed = sprintSpeed;
+            animator.SetBool("isRunning", true);
         }
-        else
+        else if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
         {
             currentSpeed = speed;
+            animator.SetBool("isWalking", true);
+            animator.SetBool("isRunning", false);
+        }
+        else{
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
         }
 
         controller.SimpleMove(Vector3.forward * 0); //move player gravity
-        float
-            horizontal =
-                Input.GetAxis("Horizontal"); // +1 if right arrow is pushed, -1 if left arrow is pushed, 0 otherwise
+        float horizontal = Input.GetAxis("Horizontal"); // +1 if right arrow is pushed, -1 if left arrow is pushed, 0 otherwise
         float vertical = Input.GetAxis("Vertical"); // +1 if up arrow is pushed, -1 if down arrow is pushed, 0 otherwise
         float rotX = Input.GetAxis("Mouse X");
         float rotY = Input.GetAxis("Mouse Y");

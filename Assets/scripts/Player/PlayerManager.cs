@@ -30,8 +30,6 @@ namespace Com.MyCompany.MyGame
         [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
         public static GameObject LocalPlayerInstance;
 
-        public GameObject scoreCounter;
-
         #endregion
 
         #region Private Fields
@@ -50,8 +48,8 @@ namespace Com.MyCompany.MyGame
         bool IsFiring;
 
         private bool hasShield = false, hasHalo = false;
-        private GameObject shieldTag;
-        private Behaviour h;
+        private GameObject shieldTag, shield;
+        // private Behaviour h;
 
         #endregion
 
@@ -90,8 +88,12 @@ namespace Com.MyCompany.MyGame
         {
             shieldTag = GameObject.Find("ShieldTag");
             shieldTag.SetActive(false);
-            h = (Behaviour)GetComponent("Halo");
-            h.enabled = false;
+
+            shield = GameObject.Find("Shield");
+            // shield.SetActive(false);
+
+            // h = (Behaviour)GetComponent("Halo");
+            // h.enabled = false;
             // Create the UI
             if (this.playerUiPrefab != null)
             {
@@ -148,12 +150,13 @@ namespace Com.MyCompany.MyGame
             }
             if (other.tag == shieldTriggeringTag && photonView.IsMine)
             {
+                tag = "ShieldPlayer";
                 hasShield = true;
-                GameObject shield = GameObject.Find("Shield");
+                // GameObject shield = GameObject.Find("Shield");
                 shield.SetActive(false);
                 shieldTag.SetActive(true);
-                h.enabled = true;
-                hasHalo = true;
+                // h.enabled = true;
+                // hasHalo = true;
             }
         }
 
@@ -168,6 +171,7 @@ namespace Com.MyCompany.MyGame
             {
                 // we slowly affect health when beam is constantly hitting us, so player has to move to prevent death.
                 this.Health -= 0.1f * Time.deltaTime;
+                Debug.Log("hit by enemy");
             }
         }
 
