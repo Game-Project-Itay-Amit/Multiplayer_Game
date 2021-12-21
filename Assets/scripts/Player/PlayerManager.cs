@@ -49,7 +49,7 @@ namespace Com.MyCompany.MyGame
         //True, when the user is firing
         bool IsFiring;
 
-        private bool hasShield = false;
+        private bool hasShield = false, hasHalo = false;
         private GameObject shieldTag;
         private Behaviour h;
 
@@ -123,6 +123,7 @@ namespace Com.MyCompany.MyGame
                     GameManager.Instance.LeaveRoom();
                 }
             }
+            
 
             if (this.beams != null && this.IsFiring != this.beams.activeInHierarchy)
             {
@@ -150,6 +151,7 @@ namespace Com.MyCompany.MyGame
                 shield.SetActive(false);
                 shieldTag.SetActive(true);
                 h.enabled = true;
+                hasHalo = true;
             }
         }
 
@@ -160,7 +162,7 @@ namespace Com.MyCompany.MyGame
         /// <param name="other">Other.</param>
         public void OnTriggerStay(Collider other)
         {
-            if (other.tag == enemyTriggeringTag && photonView.IsMine)
+            if (!hasShield && other.tag == enemyTriggeringTag && photonView.IsMine)
             {
                 // we slowly affect health when beam is constantly hitting us, so player has to move to prevent death.
                 this.Health -= 0.1f * Time.deltaTime;
